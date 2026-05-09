@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP物料更新倒计时</title>
+    <style>
+        :root {
+            --bg-color: #0a0a0f;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --accent-purple: #7c3aed;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 1200px;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+            color: var(--text-secondary);
+        }
+
+        .tabs {
+            display: inline-flex;
+            background: var(--card-bg);
+            padding: 0.5rem;
+            border-radius: 9999px;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-purple);
+            color: white;
+            box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .countdown-main {
+            /* 核心修复：使用 clamp 确保 PC 端大字且不溢出，手机端自动缩小 */
+            font-size: clamp(3rem, 12vw, 10rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            font-variant-numeric: tabular-nums;
+            
+            /* 彩虹渐变字体 */
+            background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            
+            /* 防止文字换行导致显示不全 */
+            white-space: nowrap;
+        }
+
+        .countdown-sub {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--text-secondary);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+        }
+
+        .label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            .tab-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TOP物料更新倒计时</h1>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(0)">登神经此处</button>
+            <button class="tab-btn" onclick="switchTab(1)">日常角</button>
+        </div>
+
+        <div class="countdown-main" id="main-time">00:00:00</div>
+        <div class="countdown-sub" id="sub-time">0天 00时 00分 00秒</div>
+        <div class="label" id="target-label">下次更新：周六 18:00</div>
+    </div>
+
+    <script>
+        const targets = [
+            { name: "登神经此处", day: 6, hour: 18, label: "下次更新：周六 18:00" }, // 周六
+            { name: "日常角", day: 3, hour: 18, label: "下次更新：周三 18:00" }   // 周三
+        ];
+        let currentIndex = 0;
+
+        function getNextTarget(target) {
+            const now = new Date();
+            const next = new Date();
+            
+            // 设置目标星期和时间
+            next.setDate(now.getDate() + (target.day - now.getDay() + 7) % 7);
+            next.setHours(target.hour, 0, 0, 0);
+
+            // 如果当前时间已经过了本周的目标时间，则推到下周
+            if (next.getTime() <= now.getTime()) {
+                next.setDate(next.getDate() + 7);
+            }
+            return next;
+        }
+
+        function updateCountdown() {
+            const now = new Date();
+            const targetDate = getNextTarget(targets[currentIndex]);
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                document.getElementById('main-time').innerText = "00:00:00";
+                document.getElementById('sub-time').innerText = "0天 00时 00分 00秒";
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            // 主体：总小时:分钟:秒
+            const totalHours = days * 24 + hours;
+            const mainStr = `${String(totalHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            // 下方小字：天 时 分 秒
+            const subStr = `${days}天 ${String(hours).padStart(2, '0')}时 ${String(minutes).padStart(2, '0')}分 ${String(seconds).padStart(2, '0')}秒`;
+
+            document.getElementById('main-time').innerText = mainStr;
+            document.getElementById('sub-time').innerText = subStr;
+            document.getElementById('target-label').innerText = targets[currentIndex].label;
+        }
+
+        function switchTab(index) {
+            currentIndex = index;
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach((btn, i) => {
+                if (i === index) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+            updateCountdown();
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>
