@@ -169,8 +169,8 @@
         <h1>TOP物料更新倒计时</h1>
 
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab(0)">登神经此处</button>
-            <button class="tab-btn" onclick="switchTab(1)">日常角</button>
+            <button class="tab-btn active" onclick="switchTab(0)">日常角</button>
+            <button class="tab-btn" onclick="switchTab(1)">登神经此处</button>
         </div>
 
         <div class="countdown-main" id="main-time">00:00:00</div>
@@ -191,8 +191,8 @@
 
     <script>
         const targets = [
-            { name: "登神经此处", day: 6, hour: 17, label: "下次更新：周六 17:00" },
-            { name: "日常角",     day: 3, hour: 18, label: "下次更新：周三 18:00" }
+            { name: "日常角", day: 3, hour: 18, label: "下次更新：周三 18:00" },
+            { name: "登神经此处", finished: true, label: "已完结" }
         ];
         let currentIndex = 0;
 
@@ -206,10 +206,17 @@
         }
 
         function updateCountdown() {
-            const now        = new Date();
-            const targetDate = getNextTarget(targets[currentIndex]);
-            const diff       = targetDate - now;
-
+            const target = targets[currentIndex];
+        
+            if (target.finished) {
+                document.getElementById('main-time').innerText = "已完结";
+                return;
+            }
+        
+            const now = new Date();
+            const targetDate = getNextTarget(target);
+            const diff = targetDate - now;
+            
             if (diff <= 0) {
                 document.getElementById('main-time').innerText = "00:00:00";
                 document.getElementById('sub-time').innerText  = "0天 00时 00分 00秒";
