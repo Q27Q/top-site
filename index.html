@@ -1,250 +1,41 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TOP物料更新倒计时</title>
-    <style>
-        :root {
-            --bg-color: #0a0a0f;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.6);
-            --accent-purple: #7c3aed;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .container {
-            text-align: center;
-            width: 90%;
-            max-width: 1200px;
-            padding: 2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        h1 {
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
-            font-weight: 700;
-            margin-bottom: 2rem;
-            letter-spacing: -0.02em;
-            color: var(--text-secondary);
-        }
-
-        .tabs {
-            display: inline-flex;
-            background: var(--card-bg);
-            padding: 0.5rem;
-            border-radius: 9999px;
-            margin-bottom: 3rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .tab-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            padding: 0.75rem 2rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 9999px;
-            transition: all 0.3s ease;
-        }
-
-        .tab-btn.active {
-            background: var(--accent-purple);
-            color: white;
-            box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
-        }
-
-        .countdown-main {
-            font-size: clamp(3rem, 12vw, 10rem);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 1rem;
-            font-variant-numeric: tabular-nums;
-            background: linear-gradient(90deg, #ff2200, #ff8800, #ffee00, #22cc44, #1177ff, #22cc44, #ffee00, #ff8800, #ff2200);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            white-space: nowrap;
-            animation: shimmer 6s linear infinite;
-        }
-
-        @keyframes shimmer {
-            0%   { background-position: 200% center; }
-            100% { background-position: 0% center; }
-        }
-
-        .countdown-sub {
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            color: var(--text-secondary);
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            margin-bottom: 1.5rem;
-        }
-
-        .label {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.4);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 2.5rem;
-        }
-
-        .bili-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 14px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 9999px;
-            padding: 10px 24px 10px 10px;
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .bili-link:hover {
-            background: rgba(0, 161, 214, 0.15);
-            border-color: rgba(0, 161, 214, 0.5);
-            box-shadow: 0 0 24px rgba(0, 161, 214, 0.25);
-            transform: translateY(-2px);
-        }
-
-        .bili-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid rgba(0, 161, 214, 0.5);
-        }
-
-        .bili-info { text-align: left; }
-
-        .bili-name {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .bili-sub {
-            font-size: 0.78rem;
-            color: rgba(255, 255, 255, 0.45);
-            margin-top: 2px;
-        }
-
-        .bili-icon {
-            width: 22px;
-            height: 22px;
-            fill: #00a1d6;
-            flex-shrink: 0;
-        }
-
-        @media (max-width: 768px) {
-            .container { padding: 1rem; }
-            .tab-btn { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#F9F6FF">
+  <meta name="description" content="TOP物料站：汇集登陆少年组合与成员的动态和已确认账号入口。">
+  <title>TOP物料站 · The Way to the Top</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" type="module"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>TOP物料更新倒计时</h1>
-
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab(0)">日常角</button>
-            <button class="tab-btn" onclick="switchTab(1)">登神经此处</button>
-        </div>
-
-        <div class="countdown-main" id="main-time">00:00:00</div>
-        <div class="countdown-sub" id="sub-time">0天 00时 00分 00秒</div>
-        <div class="label" id="target-label">下次更新：周六 17:00</div>
-
-        <a class="bili-link" href="https://space.bilibili.com/3546657239075200" target="_blank" rel="noopener">
-            <img class="bili-avatar" src="data:image/webp;base64,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" alt="登陆少年组合头像">
-            <div class="bili-info">
-                <div class="bili-name">登陆少年组合</div>
-                <div class="bili-sub">bilibili 主页</div>
-            </div>
-            <svg class="bili-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"/>
-            </svg>
-        </a>
-    </div>
-
-    <script>
-        const targets = [
-            { name: "日常角", day: 3, hour: 18, label: "下次更新：周三 18:00" },
-            { name: "登神经此处", finished: true, label: "已完结" }
-        ];
-        let currentIndex = 0;
-
-        function getNextTarget(target) {
-            const now  = new Date();
-            const next = new Date();
-            next.setDate(now.getDate() + (target.day - now.getDay() + 7) % 7);
-            next.setHours(target.hour, 0, 0, 0);
-            if (next.getTime() <= now.getTime()) next.setDate(next.getDate() + 7);
-            return next;
-        }
-
-        function updateCountdown() {
-            const target = targets[currentIndex];
-        
-            if (target.finished) {
-                document.getElementById('main-time').innerText = "已完结";
-                return;
-            }
-        
-            const now = new Date();
-            const targetDate = getNextTarget(target);
-            const diff = targetDate - now;
-            
-            if (diff <= 0) {
-                document.getElementById('main-time').innerText = "00:00:00";
-                document.getElementById('sub-time').innerText  = "0天 00时 00分 00秒";
-                return;
-            }
-
-            const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours   = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            const totalH  = days * 24 + hours;
-
-            document.getElementById('main-time').innerText =
-                `${String(totalH).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
-            document.getElementById('sub-time').innerText =
-                `${days}天 ${String(hours).padStart(2,'0')}时 ${String(minutes).padStart(2,'0')}分 ${String(seconds).padStart(2,'0')}秒`;
-            document.getElementById('target-label').innerText = targets[currentIndex].label;
-        }
-
-        function switchTab(index) {
-            currentIndex = index;
-            document.querySelectorAll('.tab-btn').forEach((btn, i) =>
-                btn.classList.toggle('active', i === index));
-            updateCountdown();
-        }
-
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
-    </script>
+  <a class="skip" href="#latest">跳到最新动态</a>
+  <header class="hero">
+    <div class="hero-art" aria-hidden="true"></div>
+    <div class="hero-copy"><p class="eyebrow">OUR LITTLE WONDERLAND</p><h1>TOP<span class="title-star" aria-hidden="true">✧</span></h1><p class="handwriting">the way to the top</p><h2>登陆少年组合 · 物料站</h2><p class="tagline">一个入口，收藏每一份精彩</p></div>
+  </header>
+  <nav class="main-nav" aria-label="主要板块">
+    <a href="#latest" class="active" aria-current="location"><span aria-hidden="true">✧</span> 最新动态</a>
+    <a href="#official"><span aria-hidden="true">♧</span> 官方账号</a>
+    <a href="#members"><span aria-hidden="true">♡</span> 成员账号</a>
+  </nav>
+  <main class="layout">
+    <section id="latest" class="panel feed-panel" aria-labelledby="latest-title">
+      <div class="section-heading"><div><p class="eyebrow">MOMENTS TO KEEP</p><h2 id="latest-title"><span aria-hidden="true">✦</span> 最新动态</h2></div><span class="small-badge">一起期待新的相遇</span></div>
+      <p class="section-description">在这里，遇见组合与成员的精彩日常。</p>
+      <div class="filters"><div class="platform-filters" role="group" aria-label="按平台筛选"><button data-platform="all" aria-pressed="true">全部</button><button data-platform="weibo" aria-pressed="false">微博</button><button data-platform="douyin" aria-pressed="false">抖音</button><button data-platform="kuaishou" aria-pressed="false">快手</button><button data-platform="bilibili" aria-pressed="false">B站</button></div><label class="account-filter">发布账号 <select id="account-filter"><option value="all">全部账号</option></select></label></div>
+      <div id="feed" aria-live="polite" aria-busy="true"><div class="empty-state"><span class="empty-symbol" aria-hidden="true">✧</span><h3>正在打开物料收藏夹</h3><p>请稍候片刻</p></div></div>
+      <button id="load-more" class="load-more" hidden>查看更多动态 ↓</button>
+      <div id="sync-status" class="sync-status"></div>
+      <p class="feed-note">本站仅汇总动态入口，完整内容请前往原平台查看。</p>
+    </section>
+    <aside class="account-column">
+      <section id="official" class="panel" aria-labelledby="official-title"><div class="section-heading"><div><p class="eyebrow">STAY CONNECTED</p><h2 id="official-title"><span aria-hidden="true">✦</span> 官方账号</h2></div><span aria-hidden="true" class="heading-flower">✧</span></div><p class="section-description">关注登陆少年，收藏每一次相遇。</p><div id="official-accounts"></div></section>
+      <section id="members" class="panel" aria-labelledby="members-title"><div class="section-heading"><div><p class="eyebrow">A LITTLE CLOSER</p><h2 id="members-title"><span aria-hidden="true">♡</span> 成员账号</h2></div><span aria-hidden="true" class="heading-flower">✧</span></div><p class="section-description">各自闪耀，一起向上。</p><div id="member-accounts"></div><p class="account-note">仅收录已确认的账号，更多入口陆续补充。</p></section>
+    </aside>
+  </main>
+  <footer><div aria-hidden="true">✧ ───── ✦ ───── ✧</div><p>THE WAY TO THE TOP</p><small>非官方粉丝整理站 · 仅用于交流分享</small></footer>
+  <noscript><p class="noscript">请启用 JavaScript 查看账号和动态。<a href="https://space.bilibili.com/3546657239075200">登陆少年组合 B站主页</a></p></noscript>
 </body>
 </html>

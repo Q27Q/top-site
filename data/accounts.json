@@ -1,0 +1,7 @@
+{
+  "platforms": {"weibo":"微博","douyin":"抖音","kuaishou":"快手","bilibili":"B站"},
+  "accounts": [
+    {"id":"official","name":"登陆少年组合","type":"official","avatar":"assets/official-avatar.webp","links":{"weibo":"https://weibo.com/u/7854957897","douyin":"https://v.douyin.com/HvHdkUbiFGk/","kuaishou":"https://www.kuaishou.com/profile/3x8tsjyjyr9sgds","bilibili":"https://space.bilibili.com/3546657239075200"}},
+    {"id":"zhangji","name":"张极","type":"member","links":{"weibo":"https://weibo.com/u/7026420593","kuaishou":"https://www.kuaishou.com/profile/3xjah6h9pgfnbx2"}}
+  ]
+}

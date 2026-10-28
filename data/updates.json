@@ -1,0 +1,9 @@
+{
+  "items": [],
+  "checks": {
+    "weibo": {"lastSuccessAt":null,"lastFailureAt":null},
+    "douyin": {"lastSuccessAt":null,"lastFailureAt":null},
+    "kuaishou": {"lastSuccessAt":null,"lastFailureAt":null},
+    "bilibili": {"lastSuccessAt":null,"lastFailureAt":null}
+  }
+}
